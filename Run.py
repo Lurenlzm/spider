@@ -16,7 +16,7 @@ from scrapy.settings import Settings
 #翻译 
 #运行蜘蛛外项目没有多少不同。
 #你必须根据需要创建一个通用设置对象并填充它(见内置设定参考手册可用的设置),而不是使用配置由get_project_settings返回。
-def aaa():
+def run_csbk():
 	settings = Settings({
 		#Spiders can still be referenced by their name if SPIDER_MODULES is set with the modules where Scrapy should look for spiders.
 		#Otherwise, passing the spider class as first argument in the CrawlerRunner.
@@ -32,7 +32,10 @@ def aaa():
 	    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'},
 		#启用pipelines组件
 		'ITEM_PIPELINES':{
-	    'qiushibaike.qiushibaike.pipelines.QiushibaikePipeline': 400,}
+	    'qiushibaike.qiushibaike.pipelines.QiushibaikePipeline': 400,},
+
+	    'CONCURRENT_REQUESTS':1,     #同时只处理一个请求  
+	    'DOWNLOAD_DELAY':2			#每个2秒 下载一个页面  
 	    })
 	runner=CrawlerRunner(settings)
 
@@ -40,11 +43,12 @@ def aaa():
 	d.addBoth(lambda _: reactor.stop())
 	reactor.run()
 	return 0
+#下面的代码仅共参考，实际上直接run_csbk() 也可以  
 def thread_qiushi():
 	print("--------------")
-	threading.Thread(target=aaa())
-
-
+	threading.Thread(target=run_csbk())
+if __name__ == '__main__':
+	thread_qiushi()
 
 
 
